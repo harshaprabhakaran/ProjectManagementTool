@@ -1,0 +1,51 @@
+<!-- AdminAddManager.blade.php -->
+
+@include('headerfooter.header')
+@include('SideBar.SideMenu1')
+
+<form action="{{URL::to('Insertmanager')}}" method="post">
+  <input type="hidden" name="_token" value="{{csrf_token()}}">
+  
+<!-- <div id="Head"><h1>Add Member</h1></div>   -->
+<div id="box">
+        <div class='itemName'>
+          <h3>Manager_Name</h3>  
+        </div>
+        <div class="items">
+          <input type='text' name='Mname' >
+        </div>
+        <div class="itemName">
+          <h3>Designation</h3>
+        </div>
+        <div class="items">
+          <input type='checkbox' name='mdes' value="trainer">Trainer
+          <input type='checkbox' name='mdes' value="trainee">Trainee
+        </div>
+        <div class="itemName">
+          <h3>Course</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='Mcourse' >
+        </div>
+        <div class="itemName">
+          <h3>Email</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='Memail' >
+        </div>
+        <div class="itemName">
+          <h3>User_Name</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='username' >
+        </div>
+        <div class="itemName">
+          <h3>Password</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='password' >
+        </div>
+        <div class="items1">
+          <input type='Submit' name='sub' value="Submit" id="sub">
+        </div>
+</form>

@@ -1,0 +1,262 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\LogInModel;
+use App\AddManagerModel;
+use App\AddMemberModel;
+use App\AddProjectModel;
+use App\AddTaskModel;
+use App\SendDatasModel;
+use DB;
+Use Session;
+
+class ProjectManagementToolController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function AddManager()
+    {
+        return view("AdminAddManager");
+    }
+    public function AddManagerInsert(Request $item)
+    {
+            
+        $data["Username"]= $item->post("username");
+        $data["Password"]= $item->post("password");
+        $data["Role"]="manager";
+         // print_r($data);
+         // die();
+        $ans=LogInModel::create($data);
+        // echo "".$ans->id;  // to get last id
+        $data["Manager_Name"]= $item->post("Mname");
+        $data["Designation"]= $item->post("mdes");
+        $data["course"]= $item->post("Mcourse");
+        $data["Email"]= $item->post("Memail");
+        $data["Login_id"]= $ans->id;
+        print_r($data);
+        AddManagerModel::create($data);
+    }
+    public function Addmember()
+    {
+        return view("AdminAddMember");
+    }
+    public function InsertAddmember(Request $mem)
+    {
+        $data["Username"]= $mem->post("username");
+        $data["Password"]= $mem->post("password");
+        $data["Role"]="member";
+        // print_r($data);
+        // die();
+        $ans=LogInModel::create($data);
+        // echo "".$ans;
+        $data["Member_Name"]= $mem->post("Mname");
+        $data["Course"]= $mem->post("Mcourse");
+        $data["Designation"]= $mem->post("des");
+        $data["Contact"]= $mem->post("Mcontact");
+        $data["Email"]= $mem->post("email");
+        $data["Login_id"]= $ans->id;
+        // print_r($data);   
+        // die();
+        AddMemberModel::create($data);
+        
+    }
+
+     public function Addproject()
+    {
+       $getManagerName= DB::table("add_manager_models")->select("Manager_id", "Manager_Name")->get()->toArray();
+    // print_r($getManagerName);
+    // die();
+        return view("AdminAddProject", compact('getManagerName'));
+    }
+    public function AddprojectInsert(Request $pro)
+    {
+        $data["Project_name"]= $pro->post("Pname");
+        $data["Status"]= $pro->post("Pstatus");
+        $data["Course"]= $pro->post("Pcourse");
+        $data["Description"]= $pro->post("Pdist");
+        $data["Start_Date"]= $pro->post("startdate");
+        $data["Proposal_Date"]= $pro->post("proposaldate");
+        $data["Due_Date"]= $pro->post("duedate");
+        $data["Manager_id"]=$pro->post("GetmanagerName");
+        print_r($data);
+        //  die();
+        AddProjectModel::create($data);
+
+    }
+    public function Send()
+    {
+        return view("SendData");   
+    }
+    public function senddata(Request $sendData)
+    { 
+        $IDget= Session::get('lohinId');
+        $data["Reciever"]= $sendData->post("toemail");
+        $data["Subject"]= $sendData->post("Ssubject");
+        $data["Description"]= $sendData->post("Stext");
+        $data["Sender_id"]= $IDget;
+        print_r($data);
+        die();
+        SendDataModel::create($data);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view("LoginPage");
+        
+    }
+
+    public function LoginAction(Request $log)
+    {
+        $logdataur= $log->post("UserName");
+        $logdataps= $log->post("Password");
+
+        $results = DB::select('select * from log_in_models where Username= ? and Password=?', [$logdataur,$logdataps]);
+        // print_r($results);
+        // die();
+         // echo $results[0]->Login_id;
+        Session::put('lohinId',$results[0]->Login_id);        
+        Session::get('lohinId');
+        if ($results[0]->Role=="manager")
+        {
+            return redirect("managerhome");// Redirecting anotjer page
+        }
+        elseif ($results[0]->Role=="admin")
+        {
+            return redirect("adminhome");
+        }
+        elseif ($results[0]->Role=="member")
+        {
+            return redirect("memberhome");
+        }
+        
+
+    }
+    public function MemberListMgr()
+    {
+        $memberList= AddMemberModel::all()->toArray();
+        return view('ManagerHomePage', compact('memberList'));
+    }
+    public function ProjectList()
+    {
+        $projectlist= AddProject::all()->toArray();
+        return view('ProjectList',compact('projectlist'));
+    }
+    public function AddTask()
+    {
+       $getLogid=Session::get('lohinId');
+       // echo "string".$getLogid;
+       // die();
+       $getManagerName= DB::table("add_manager_models")->select("Manager_id", "Manager_Name")->where("Login_id", "=", "$getLogid")->get()->toArray();
+        // print_r($getManagerName);
+        // die();
+        $getprojectName= DB::table("add_projects")->select("Project_id","Project_name")->get()->toArray();
+         return view("ManagerAddTask", compact('getManagerName', 'getprojectName'));
+    }
+    public function TaskAddInsert(Request $task)
+    {
+        // echo "string";
+        $Taskdata["Task_Name"]= $task->post("Tname");
+        $Taskdata["Description"]= $task->post("Ttext");
+        $Taskdata["Priority"]= $task->post("Tpriority");
+        $Taskdata["Manager_id"]= $task->post("TmanagerId");
+        $Taskdata["Project_id"]= $task->post("TprojectId");
+        print_r($Taskdata);
+        // die();
+        AddTaskModel::create($Taskdata);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function MemberHome()
+    {
+       return view("MemberHome");
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id 
+     * @return \Illuminate\Http\Response
+     */
+    public function Adminshow()
+    {
+
+        $managers= AddManagerModel::all()->toArray();
+        $members= AddMemberModel::all()->toArray();
+        $projectlist= AddProjectModel::all()->toArray();
+        return view("AdminHome",compact('managers','members','projectlist'));
+    }
+
+    public function SendManaderData($id,$table)
+    {
+        if ($table=='add_manager_models')
+        {
+           $Passdata1=DB::table("add_manager_models")->join("log_in_models","add_manager_models.Login_id", "=" , "log_in_models.Login_id")->select("Manager_id","Manager_Name","Email","Username","Password")->where("Manager_id", "=" , "$id")->get();
+           
+           $Passdata2['Role']='Manager';
+           $Passdata2['TableName']=$table;
+           $Passdata2['id']=$Passdata1[0]->Manager_id;
+           $Passdata2['data1']=$Passdata1[0]->Manager_Name;
+           $Passdata2['data2']=$Passdata1[0]->Email;
+           $Passdata2['data3']=$Passdata1[0]->Username;
+           $Passdata2['data4']=$Passdata1[0]->Password;
+           // print_r($Passdata1);
+           // echo $Passdata2['TableName'];
+           // die();
+        }
+        if ($table=='add_member_models')
+        {
+            $Passdata1= DB::table("add_member_models")->join("log_in_models","add_member_models.Login_id", "=", "log_in_models.Login_id")->select("Member_id","Member_Name","Email","Username","Password")->where("Member_id", "=" , "$id")->get();
+
+            $Passdata2['Role']='Member';
+            $Passdata2['TableName']=$table;
+            $Passdata2['id']=$Passdata1[0]->Member_id;
+            $Passdata2['data1']=$Passdata1[0]->Member_Name;
+            $Passdata2['data2']=$Passdata1[0]->Email;
+            $Passdata2['data3']=$Passdata1[0]->Username;
+            $Passdata2['data4']=$Passdata1[0]->Password;
+        }
+        if ($table=='add_project_models')
+        {
+            $Passdata1=DB::table("add_project_models")->join("add_manager_models","add_project_models.Manager_id", "=", "add_manager_models.Manager_id")->select("Project_id", "Project_name", "Status", "Description", "Email")->where("Project_id", "=", "$id")->get();
+
+            $Passdata2['Role']='Project';
+            $Passdata2['TableName']=$table;
+            $Passdata2['id']=$Passdata1[0]->Project_id;
+            $Passdata2['data1']=$Passdata1[0]->Project_name;
+            $Passdata2['data2']=$Passdata1[0]->Email;
+            $Passdata2['data3']=$Passdata1[0]->Status;
+            $Passdata2['data4']=$Passdata1[0]->Description;
+        }        
+        // print_r($Passdata2);
+        // die();
+        return view("SendDataManager",compact("Passdata2"));
+    }
+    public function StoreSendData(Request $sendData)
+    {
+        $IDget= Session::get('lohinId');
+        $data["Reciever"]= $sendData->post("NM");
+        $data["Subject"]= $sendData->post("dataSub");
+        $data["Id"]= $sendData->post("MId");
+        $data["Role"]=$sendData->post("Tname") ;
+        $data["Sender_id"]=$IDget;
+        // print_r($data);
+        // die();
+        SendDatasModel::create($data);
+    }
+
+}

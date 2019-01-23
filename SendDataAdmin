@@ -1,0 +1,45 @@
+<!-- SendDataManager.blade.php -->
+
+@include('headerfooter.header')
+@include('SideBar.SideMenu1')
+<form action="{{URL::To('StoreData')}}" method="post">
+	<input type="hidden" name="_token" value="{{csrf_token()}}">
+
+<div id="box">
+        <div class='itemName'>
+          <h3>To</h3>  
+        </div>
+        <div class="items">
+         <input type="text" name="MEd" value="{{$Passdata2['data2']}}">
+        </div>
+        <div class='itemName'>
+          <h3>Subject</h3>  
+        </div>
+        <div class="items">
+          <textarea name="dataSub"></textarea>
+        </div>
+        <label>Details</label>
+        <div class="discipt">        	
+        	<input type="hidden" name="MId" value="{{$Passdata2['id']}}">
+        	<input type="hidden" name="Tname" value="{{$Passdata2['TableName']}}">
+        	<input type="hidden" name="Tname" value="{{$Passdata2['Role']}}">
+        	<div class="Mname"><h3>Name</h3></div>
+        	<div class="Mitem">
+        		<input type="text" name="NM" value="{{$Passdata2['data1']}}">
+        	</div>
+        	<div class="Mname"><h3>Data 1</h3></div>
+        	<div class="Mitem">
+        		<input type="text" name="USR" value="{{$Passdata2['data3']}}">
+        	</div>
+        	<div class="Mname"><h3>Data 2</h3></div>
+        	<div class="Mitem">
+        		<input type="text" name="PSD" value="{{$Passdata2['data4']}}">
+        	</div>        		
+        </div>
+        <div class="items1">
+          <input type='Submit' name='Sendsub' value="Send" id="sub">
+        </div>
+</div>
+</form>
+</body>
+</html>

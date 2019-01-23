@@ -3,7 +3,6 @@
 @include('headerfooter.header')
 @include('SideBar.SideMenu1')
 
-
 <div class="listtable1">
 <table border="1px solid black">
 	 <thead>

@@ -1,6 +1,7 @@
 <!-- SecondHead1.blade.php -->
 
 <!-- NavBar -->
+
 <nav class="secondHead">
   <a class="secondHead">Navbar</a>
   <form class="secondHead">

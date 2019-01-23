@@ -1,0 +1,76 @@
+<!-- AdminAddProject.blade.php -->
+@include('headerfooter.header')
+@include('SideBar.SideMenu1')
+<form action="{{URL::to('Insertproject')}}" method="post">
+  <input type="hidden" name="_token" value="{{csrf_token()}}">
+
+
+<div id="box">
+       <div class='itemName'>
+        <h3>Project_Name</h3>  
+        </div>
+        <div class="items">
+          <input type='text' name='Pname' required="">
+          </div>
+          <div class="itemName">
+          <h3>Status</h3>
+        </div>
+        <div class="items" >
+        	<select name="Pstatus" >
+        		<option value="New" >New</option>
+        		<option value="InProgress">InProgress</option>
+        		<option value="On Hold">On Hold</option>
+        		<option value="Feedback required">Feedback required</option>
+        		<option value="Resolve">Resolve</option>
+        	</select>
+          </div>
+          <div class="itemName">
+          <h3>Course</h3>
+        </div>
+        <div class="items">
+         <input type='radio' name='Pcourse' value="PHP" required="">PHP
+         <input type='radio' name='Pcourse' value="Python" required="">Python
+         <input type='radio' name='Pcourse' value="Android" required="">Android
+         <input type='radio' name='Pcourse' value="Java" required="">Java
+         <input type='radio' name='Pcourse' value=".Net" required="">.Net
+          </div>
+          <div class="itemName">
+          <h3>Description</h3>
+        </div>
+        <div class="items">
+        	<textarea name="Pdist" required=""></textarea>
+        </div>
+          <div class="itemName">
+          <h3>Start_Date</h3>
+        </div>
+        <div class="items">
+          <input type='date' name='startdate' required="">
+          </div>
+          <div class="itemName">
+          <h3>Proposal_Date</h3>
+        </div>
+        <div class="items">
+          <input type='date' name='proposaldate' required="">
+          </div>
+          <div class="itemName">
+          <h3>Due_Date</h3>
+        </div>
+        <div class="items">
+          <input type='date' name='duedate' required="">
+          </div>
+          <div class="itemName">
+          <h3>Manager_Name</h3>
+        </div>
+        <div class="items">
+          <select name="GetmanagerName">
+             @foreach($getManagerName as $ManagerName)
+             <option value="{{$ManagerName->Manager_id}}">{{$ManagerName->Manager_Name}}</option>
+              @endforeach
+          </select>
+        </div>
+        <div class="items1">
+        <input type='Submit' name='sub' value="Submit" id="sub">
+        </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!-- AdminAddMember.blade.php -->
+@include('headerfooter.header')
+@include('SideBar.SideMenu1')
+
+<form action="{{URL::to('Insertmember')}}" method="post">
+  <input type="hidden" name="_token" value="{{csrf_token()}}">
+<div id="box">
+        <div class='itemName'>
+          <h3>Member_Name</h3>  
+        </div>
+        <div class="items">
+          <input type='text' name='Mname' >
+        </div>
+        <div class="itemName">
+          <h3>Course</h3>
+        </div>
+        <div class="items">
+         <input type='radio' name='Mcourse' value="PHP" >PHP
+         <input type='radio' name='Mcourse' value="Python" >Python
+         <input type='radio' name='Mcourse' value="Android" >Android
+         <input type='radio' name='Mcourse' value="Java" >Java
+         <input type='radio' name='Mcourse' value=".Net" >.Net
+        </div>
+        <div class="itemName">
+          <h3>Designation</h3>
+        </div>
+        <div class="items">
+          <input type='checkbox' name='des' value="itfs">ITFS
+          <input type='checkbox' name='des' value="normal course">Normal Course
+        </div>
+        <div class="itemName">
+          <h3>Contact</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='Mcontact' >
+        </div>
+        <div class="itemName">
+          <h3>Email</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='email' >
+        </div>
+        <div class="itemName">
+          <h3>User_Name</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='username' >
+        </div>
+        <div class="itemName">
+          <h3>Password</h3>
+        </div>
+        <div class="items">
+          <input type='text' name='password' >
+        </div>
+        <div class="items1">
+          <input type='Submit' name='sub' value="Submit" id="sub">
+        </div>
+</form>
+</body>
+</html>
